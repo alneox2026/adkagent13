@@ -185,7 +185,7 @@ variable "firestore_billing_ledger_collection" {
 variable "firestore_customer_wallets_collection" {
   description = "Top-level Firestore collection for server-owned prepaid customer wallets."
   type        = string
-  default     = "customer_wallets_adkagent13"
+  default     = "customer_wallets_agentic15"
 }
 
 variable "firestore_billing_reservations_collection" {
@@ -197,25 +197,25 @@ variable "firestore_billing_reservations_collection" {
 variable "firestore_wallet_transactions_collection" {
   description = "Top-level immutable Firestore collection for customer wallet transactions."
   type        = string
-  default     = "wallet_transactions_adkagent13"
+  default     = "wallet_transactions_agentic15"
 }
 
 variable "firestore_customer_billing_periods_collection" {
   description = "Top-level Firestore collection for customer monthly billing aggregates."
   type        = string
-  default     = "customer_billing_periods_adkagent13"
+  default     = "customer_billing_periods_agentic15"
 }
 
 variable "firestore_customer_billing_accounts_collection" {
   description = "Top-level private Firestore collection mapping billing subjects to Stripe customer and subscription state."
   type        = string
-  default     = "customer_billing_accounts_adkagent13"
+  default     = "customer_billing_accounts_agentic15"
 }
 
 variable "firestore_stripe_webhook_events_collection" {
   description = "Top-level private Firestore collection for immutable Stripe webhook event receipts."
   type        = string
-  default     = "stripe_webhook_events_adkagent13"
+  default     = "stripe_webhook_events_agentic15"
 }
 
 
