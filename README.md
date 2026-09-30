@@ -69,7 +69,7 @@ When using this template to create a new cluster (e.g. `v4`, `hr-agents`, `sales
   * `region`: Target GCP deployment region (default: `us-central1`).
   * `gateway_service_name`, `worker_service_name`, `billing_api_service_name`: Service names for the new cluster.
   * `pubsub_topic_name`: Pub/Sub topic name for turn events.
-  * `firestore_threads_collection`, `firestore_customer_wallets_collection`: collection names for this cluster. The normal Cloud Shell workflow generates unique values automatically; specify all collection names only for a manual Terraform deployment.
+  * `firestore_threads_collection`, `firestore_customer_wallets_collection`: collection names for this cluster. The Cloud Shell workflow generates unique values by default; use the documented per-collection `FIRESTORE_…` environment overrides only when intentionally sharing selected collections.
 
 ### 2. Agent Registration
 * **`config/agents.prod.yaml`** & **`config/agents.dev.yaml`**:
@@ -152,6 +152,33 @@ image prefix, `stacks/agentic4/middleware` Terraform state prefix, and an
 stacks even when they share a Google Cloud project and Artifact Registry
 repository. Override `MIDDLEWARE_STACK_NAME`, `MIDDLEWARE_IMAGE_PREFIX`, or
 `FIRESTORE_NAMESPACE` only intentionally.
+
+Per-collection environment overrides are supported by
+`scripts/cloudshell_deploy_middleware.sh`. Each unset variable keeps its
+namespace-derived default. To deliberately share billing records between
+middleware stacks, export only the collections that should be common; for
+example:
+
+```bash
+export FIRESTORE_CUSTOMER_WALLETS_COLLECTION="customer_wallets_shared"
+export FIRESTORE_WALLET_TRANSACTIONS_COLLECTION="wallet_transactions_shared"
+export FIRESTORE_CUSTOMER_BILLING_PERIODS_COLLECTION="customer_billing_periods_shared"
+export FIRESTORE_CUSTOMER_BILLING_ACCOUNTS_COLLECTION="customer_billing_accounts_shared"
+bash ./scripts/cloudshell_deploy_middleware.sh
+```
+
+The full override set is `FIRESTORE_THREADS_COLLECTION`,
+`FIRESTORE_MESSAGES_SUBCOLLECTION`, `FIRESTORE_IDEMPOTENCY_COLLECTION`,
+`FIRESTORE_BILLING_LEDGER_COLLECTION`,
+`FIRESTORE_CUSTOMER_WALLETS_COLLECTION`,
+`FIRESTORE_BILLING_RESERVATIONS_COLLECTION`,
+`FIRESTORE_WALLET_TRANSACTIONS_COLLECTION`,
+`FIRESTORE_CUSTOMER_BILLING_PERIODS_COLLECTION`,
+`FIRESTORE_CUSTOMER_BILLING_ACCOUNTS_COLLECTION`,
+`FIRESTORE_STRIPE_WEBHOOK_EVENTS_COLLECTION`, and
+`FIRESTORE_SUBSCRIPTION_CANCELLATION_REQUESTS_COLLECTION`. Do not change
+`FIRESTORE_NAMESPACE` to share only billing records; that would also change
+the defaults for the middleware's other data.
 
 `IMPORT_EXISTING_RESOURCES=true` is required for recovery-only Terraform
 imports. The deploy script rejects plans that delete or replace resources
